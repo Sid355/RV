@@ -36,7 +36,9 @@ def t():
     import json
     from pprint import pprint
     nl=open('mcx.txt','r').read()
-    nl=json.loads(tkp())['data']['candles']+json.loads(nl)['data']['candles']
+    tk=tkp()
+    nl=json.loads(tk)['data']['candles']+json.loads(nl)['data']['candles']
+    print(tk)
     ns=[]
     pks=[]
     vps=[]
@@ -62,6 +64,7 @@ def t():
     vss=5
     vk=KMeans(n_clusters=vss,random_state=0,n_init="auto").fit(ns)
     vks=vk.predict(ns)
+    print(vks)
     svvs=[0]*vss
     pvs=[0]*vss
     for n in range(0,len(vks)):
@@ -76,5 +79,5 @@ def t():
         for n in range(0,len(vks)):
             if vks[n]==k:
                 plt.plot(ns[n])
-    plt.show()
+    if 0:plt.show()
 t()
