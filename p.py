@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 def p():
     ml=open("NHPC.txt").read()
     print("NHPC")
@@ -23,11 +24,19 @@ def d():
     }
     response = requests.get(url, headers=headers)
     open('mcx.txt','w').write(response.text)
+def tkp():
+    import requests
+    url = 'https://api.upstox.com/v2/historical-candle/intraday/NSE_EQ%7CINE745G01035/1minute'
+    headers = {
+                'Accept': 'application/json'
+                }
+    response = requests.get(url, headers=headers)
+    return response.text
 def t():
     import json
     from pprint import pprint
     nl=open('mcx.txt','r').read()
-    nl=json.loads(nl)['data']['candles']
+    nl=json.loads(tkp())['data']['candles']+json.loads(nl)['data']['candles']
     ns=[]
     pks=[]
     vps=[]
@@ -59,7 +68,7 @@ def t():
         svvs[vks[n]]+=vps[n]
         pvs[vks[n]]+=1
     for n in range(0,vss):
-        svvs[vss]/=pvs[vss]
+        svvs[n]/=pvs[n]
     print(svvs,pvs)
     import matplotlib.pyplot as plt
     for k in range(0,vss):
