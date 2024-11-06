@@ -80,4 +80,21 @@ def t():
             if vks[n]==k:
                 plt.plot(ns[n])
     if 0:plt.show()
-t()
+def c():
+    import json
+    from pprint import pprint
+    nl=open('mcx.txt','r').read()
+    tk=tkp()
+    nl=json.loads(tk)['data']['candles']+json.loads(nl)['data']['candles']
+    print(tk)
+    ns=[]
+    pks=[]
+    vps=[]
+    from termcolor import colored
+    for n in range(0,len(nl)):
+        k=[int(s) for s in nl[n][0].split('T')[1].split('+')[0].split(':')] # hour k[0] minute k[1] open nl[n][1] high [n][2] low [n][3] close [n][4] volume [n][5] Open Interest [n][6]
+        pv=(nl[n][4]-nl[n][1])/nl[n][1]
+        if k[0]==9 and k[1]==15:print('\n')
+        print(colored(min(abs(int(pv*1000)),9),'red' if pv<0 else 'green'),end='')
+        
+c()
