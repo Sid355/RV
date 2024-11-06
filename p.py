@@ -56,8 +56,10 @@ def t():
     svvs=[0]*vss
     pvs=[0]*vss
     for n in range(0,len(vks)):
-        svvs[vks[n]]+=vps[n]/vss
+        svvs[vks[n]]+=vps[n]
         pvs[vks[n]]+=1
+    for n in range(0,vss):
+        svvs[vss]/=pvs[vss]
     print(svvs,pvs)
     import matplotlib.pyplot as plt
     for k in range(0,vss):
