@@ -44,6 +44,12 @@ def t():
     vps=[]
     for n in range(0,len(nl)):
         k=[int(s) for s in nl[n][0].split('T')[1].split('+')[0].split(':')]
+        if 0 and len(pks)==ppvs:
+            ns+=[pks]
+            vps+=[nl[n-1+vpsk][1]]
+            pks=[]
+        if 0 and len(pks)<15 and ((len(pks)!=0) or k[0]<14):
+            pks+=[nl[n][1]]
         if k[0]==9 and k[1]<=30:
             pks+=[nl[n][1]]
         elif pks!=[]:
