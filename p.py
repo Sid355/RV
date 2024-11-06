@@ -38,10 +38,12 @@ def t():
     nl=open('mcx.txt','r').read()
     tk=tkp()
     nl=json.loads(tk)['data']['candles']+json.loads(nl)['data']['candles']
-    print(tk)
+    nl=list(reversed(nl))
+    if 0:print(tk)
     ns=[]
     pks=[]
     vps=[]
+    nstd=[]
     for n in range(0,len(nl)):
         k=[int(s) for s in nl[n][0].split('T')[1].split('+')[0].split(':')]
         if 0 and len(pks)==ppvs:
@@ -50,11 +52,13 @@ def t():
             pks=[]
         if 0 and len(pks)<15 and ((len(pks)!=0) or k[0]<14):
             pks+=[nl[n][1]]
-        if k[0]==9 and k[1]<=30:
+        if k[0]==11 and k[1]<=15:
             pks+=[nl[n][1]]
         elif pks!=[]:
             ns+=[pks]
-            vps+=[nl[n+30][1]]
+            nstd+=[[nl[k][1] for k in range(n,n+16)]]
+            if 0:vps+=[nl[n+30][1]]
+            else:vps+=[max(nstd[-1])]
             pks=[]
     for n in range(0,len(ns)):
         s=0
@@ -64,6 +68,7 @@ def t():
         vps[n]=(vps[n]-ns[n][-1])/ns[n][-1]
         for ps in range(0,len(ns[n])):
             ns[n][ps]=(ns[n][ps]-s)/s
+            nstd[n][ps]=(nstd[n][ps]-s)/s
     from sklearn.cluster import KMeans
     import numpy as np
     ns=np.array(ns)
@@ -84,8 +89,8 @@ def t():
         plt.figure(k)
         for n in range(0,len(vks)):
             if vks[n]==k:
-                plt.plot(ns[n])
-    if 0:plt.show()
+                plt.plot(np.concatenate((ns[n],np.array(nstd[n]))))
+    if 1:plt.show()
 def c():
     import json
     from pprint import pprint
@@ -103,4 +108,4 @@ def c():
         if k[0]==9 and k[1]==15:print('\n')
         print(colored(min(abs(int(pv*1000)),9),'red' if pv<0 else 'green'),end='')
         
-c()
+t()
