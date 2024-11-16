@@ -57,7 +57,7 @@ def t():
         elif pks!=[]:
             ns+=[pks]
             nstd+=[[nl[k][1] for k in range(n,n+16)]]
-            if 0:vps+=[nl[n+30][1]]
+            if 1:vps+=[nl[n+1][1]]
             else:vps+=[max(nstd[-1])]
             pks=[]
     for n in range(0,len(ns)):
@@ -89,7 +89,7 @@ def t():
         plt.figure(k)
         for n in range(0,len(vks)):
             if vks[n]==k:
-                plt.plot(np.concatenate((ns[n],np.array(nstd[n]))))
+                plt.plot(np.concatenate((ns[n],np.array(nstd[n])[0:1])))
     if 1:plt.show()
 def c():
     import json
