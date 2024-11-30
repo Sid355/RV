@@ -360,7 +360,7 @@ def historical_data():
     import json
     new_isin=isin.split('|')[0]+'%7C'+isin.split('|')[1]
 
-    date='2024-11-30/2023-05-01'        ################################################################################
+    date='2024-09-06/2024-09-06'        ################################################################################
     
     url = 'https://api.upstox.com/v2/historical-candle/'+new_isin+'/1minute/'+date
     headers = {
@@ -388,10 +388,12 @@ def historical_data():
     else:
         open(filename,'w').write(response.text)
 
-historical_data()
-#data_save()
-#print(name(isin))
-#dadw()
-#rtd()
-#buy()
-#sell()
+if __name__ == '__main__':
+    #historical_data()
+    #data_save()
+    #print(name(isin))
+    #dadw()
+    #rtd()
+    #buy()
+    #sell()
+    pass
