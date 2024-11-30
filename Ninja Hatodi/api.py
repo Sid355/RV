@@ -11,7 +11,9 @@ if 0:
     response = requests.request("GET", url, headers=headers, data=data)
     #'https://api.upstox.com/v2/login/authorization/dialog?response_type=code&client_id=ddb1a379-62db-4ed3-b109-fb31df0596cc&redirect_uri=https%3A%2F%2F127.0.0.1%3A8000'
     print(response.text)
-code='K_kszN'
+
+
+code='tmmYb0'                        ################################################################
 
 if 1:
     url = 'https://api.upstox.com/v2/login/authorization/token'

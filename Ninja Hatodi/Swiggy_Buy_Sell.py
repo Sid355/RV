@@ -5,7 +5,11 @@ def koko():
     while 1:
      cv()
 
-xs2kn='eyJ0eXAiOiJKV1QiLCJrZXlfaWQiOiJza192MS4wIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiI4TEFKRzkiLCJqdGkiOiI2NzQ2OGU2MjI0NWMwMTZjZTJlZjZiMTEiLCJpc011bHRpQ2xpZW50IjpmYWxzZSwiaWF0IjoxNzMyNjc3MjE4LCJpc3MiOiJ1ZGFwaS1nYXRld2F5LXNlcnZpY2UiLCJleHAiOjE3MzI3NDQ4MDB9.QzR5K--gq5jWcCpO7fExVqD5r20EGFAtT32pCBtbA5Y'
+xs2kn='eyJ0eXAiOiJKV1QiLCJrZXlfaWQiOiJza192MS4wIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiI4TEFKRzkiLCJqdGkiOiI2NzRhNzkxZDkwZTlhNjQ2YzdmMmI3NzAiLCJpc011bHRpQ2xpZW50IjpmYWxzZSwiaWF0IjoxNzMyOTMzOTE3LCJpc3MiOiJ1ZGFwaS1nYXRld2F5LXNlcnZpY2UiLCJleHAiOjE3MzMwMDQwMDB9.Q_dewkysJ9MkwvB2OnqLUIc40Rr5RM1mtXMQ6VWLMoM'
+
+isin='NSE_EQ|INE982J01020'
+
+
 
 lastorder=None
 lastorder_intent=0
@@ -36,8 +40,7 @@ def buysell(intent,isin,NOS):
                 #if(api_response.status=='success'):
                 #    lastorder=ap
                 if api_response.status=='success':investment_status=intent
-            except ApiException as e:
-                exit()
+            except Exception as e:
                 print("Exception when calling OrderApi->get order status: %s\n" % e.body)
         if intent<investment_status:
             body = upstox_client.PlaceOrderRequest((investment_status-intent)*NOS, "I", "IOC", 0.0, "string", isin, "MARKET", "SELL", 0, 0.0, False)
@@ -46,16 +49,16 @@ def buysell(intent,isin,NOS):
                 api_response = api_instance.place_order(body, api_version)
                 print(api_response)
                 if api_response.status=='success':investment_status=intent
-            except ApiException as e:
+            except Exception as e:
                 print("Exception when calling OrderApi->get order status: %s\n" % e.body)
 
 def buy():
     import upstox_client
     from upstox_client.rest import ApiException
     configuration = upstox_client.Configuration()
-    configuration.access_token = "eyJ0eXAiOiJKV1QiLCJrZXlfaWQiOiJza192MS4wIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiI4TEFKRzkiLCJqdGkiOiI2NzNjNTZkY2RlMmQ3OTEwMjBlNjZiNTIiLCJpc011bHRpQ2xpZW50IjpmYWxzZSwiaWF0IjoxNzMyMDA3NjQ0LCJpc3MiOiJ1ZGFwaS1nYXRld2F5LXNlcnZpY2UiLCJleHAiOjE3MzIwNTM2MDB9.qDRRrWbox4S4BKqwzvghuoZWgEardIsVd-MmD98Ge00"
+    configuration.access_token = xs2kn
     api_instance = upstox_client.OrderApi(upstox_client.ApiClient(configuration))
-    body = upstox_client.PlaceOrderRequest(1, "D", "IOC", 0.0, "string", "NSE_EQ|INE351F01018", "MARKET", "BUY", 0, 0.0, False)
+    body = upstox_client.PlaceOrderRequest(1, "I", "IOC", 0.0, "string", isin, "MARKET", "BUY", 0, 0.0, False)
     api_version = '2.0'
     try:
         api_response = api_instance.place_order(body, api_version)
@@ -67,9 +70,9 @@ def sell():
     import upstox_client
     from upstox_client.rest import ApiException
     configuration = upstox_client.Configuration()
-    configuration.access_token = "eyJ0eXAiOiJKV1QiLCJrZXlfaWQiOiJza192MS4wIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiI4TEFKRzkiLCJqdGkiOiI2NzNjNTZkY2RlMmQ3OTEwMjBlNjZiNTIiLCJpc011bHRpQ2xpZW50IjpmYWxzZSwiaWF0IjoxNzMyMDA3NjQ0LCJpc3MiOiJ1ZGFwaS1nYXRld2F5LXNlcnZpY2UiLCJleHAiOjE3MzIwNTM2MDB9.qDRRrWbox4S4BKqwzvghuoZWgEardIsVd-MmD98Ge00"
+    configuration.access_token = xs2kn
     api_instance = upstox_client.OrderApi(upstox_client.ApiClient(configuration))
-    body = upstox_client.PlaceOrderRequest(1, "D", "IOC", 0.0, "string", "NSE_EQ|INE377Y01014", "MARKET", "SELL", 0, 0.0, False)
+    body = upstox_client.PlaceOrderRequest(1, "I", "IOC", 0.0, "string", isin, "MARKET", "SELL", 0, 0.0, False)
     api_version = '2.0'
     try:
         api_response = api_instance.place_order(body, api_version)
@@ -143,7 +146,15 @@ def ntk():
     ntks+=1
     return [t()[-1][0:ntks]]
 
-isin='NSE_EQ|INE152M01016'
+
+
+
+
+
+
+
+
+
 def tk():
     import requests
     import json
@@ -251,10 +262,10 @@ def rtd():
     r=1          #Margin
   #  sp_12=0.004
   #  sp_34=0.004
-    per1=0.003   #sp_12   #0.008     #long buy 
-    per2=0.003   #sp_12   #0.008     #long sell
-    per3=0.003   #sp_34   #0.008     #short sell
-    per4=0.003   #sp_34   #0.008     #short buy
+    per1=0.006   #sp_12   #0.008     #long buy 
+    per2=0.005   #sp_12   #0.008     #long sell
+    per3=0.006   #sp_34   #0.008     #short sell
+    per4=0.002   #sp_34   #0.008     #short buy
     pl=0
     dmc=[]
     extrm_low=0 #dmc[0][1]
@@ -262,7 +273,10 @@ def rtd():
     inv=0
     inv_t=[]
     r=1
-    slp_tm=10 #sleep time
+
+    slp_tm=60           #sleep time                                                          ###############################################################################
+
+
     import time
     while True:
         try:
@@ -309,10 +323,44 @@ def rtd():
         if n==len(dmc)-1:
             print('buysell',inv)
             pass
-            #buysell(inv,isin,1)
+            buysell(inv,isin,2)                            ##################################################################################################
         if 1:time.sleep(slp_tm)
         
 
+
+
+def data_save():
+    import datetime
+    from pprint import pprint
+    import datetime
+    import upstox_client
+    from upstox_client.rest import ApiException
+    import time
+
+    configuration = upstox_client.Configuration()
+    configuration.access_token = xs2kn
+    api_version = '2.0'
+    api_instance = upstox_client.MarketQuoteApi(upstox_client.ApiClient(configuration))
+    dmc=[]
+    for k in  range(0,6*(60*6+10)):
+        try:
+            api_response = api_instance.get_full_market_quote(isin, api_version)
+            #print(type(api_response))
+            #print(datetime.datetime.now())
+            dmc+=[[api_response.data[next(iter(api_response.data))].timestamp,api_response.data[next(iter(api_response.data))].last_price]]
+            print(dmc[-1])
+        except Exception as e:
+            print("Exception when calling MarketQuoteApi->get_full_market_quote: %s\n" % e)
+            continue
+        time.sleep(1)
+    s=''
+    for l in dmc:
+        s+=l[0]+' '+str(l[1])+'\n'
+    s=s[0:-1]
+    open(isin+'data.txt').write(s)
+
+
+#data_save()
 
 ##    print(dmc[0][0])
 ##    
@@ -324,6 +372,6 @@ def rtd():
 ##    plt.show()
     
 #dadw()
-p=rtd()
+#rtd()
 #buy()
 #sell()
