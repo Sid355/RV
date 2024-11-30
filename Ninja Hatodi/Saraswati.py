@@ -14,6 +14,29 @@ isin='NSE_EQ|INE982J01020'
 lastorder=None
 lastorder_intent=0
 investment_status=0
+
+def name(isin):
+    import datetime
+    from pprint import pprint
+    import datetime
+    import upstox_client
+    from upstox_client.rest import ApiException
+    import time
+
+    configuration = upstox_client.Configuration()
+    configuration.access_token = xs2kn
+    api_version = '2.0'
+    api_instance = upstox_client.MarketQuoteApi(upstox_client.ApiClient(configuration))
+    try:
+        api_response = api_instance.get_full_market_quote(isin, api_version)
+        #print(type(api_response))
+        #print(datetime.datetime.now())
+        return api_response.data[next(iter(api_response.data))].symbol
+    except Exception as e:
+        print("Exception when calling MarketQuoteApi->get_full_market_quote: %s\n" % e)
+    
+
+
 def buysell(intent,isin,NOS):
     global lastorder,investment_status
     import upstox_client
@@ -360,6 +383,48 @@ def data_save():
     open(isin+'data.txt').write(s)
 
 
+def historical_data():
+    import requests
+    import json
+    new_isin=isin.split('|')[0]+'%7C'+isin.split('|')[1]
+
+    date='2024-11-30/2023-05-01'        ################################################################################
+    
+    url = 'https://api.upstox.com/v2/historical-candle/'+new_isin+'/1minute/'+date
+    headers = {
+    'Accept': 'application/json'
+    }
+    response = requests.get(url, headers=headers)
+    filename=name(isin)+'.txt'
+    import os.path
+    if os.path.isfile(filename):
+        res_json=response.json()
+        l1=res_json['data']['candles']
+        ms=open(filename,'r').read()
+        l0=json.loads(ms)['data']['candles']
+        mila=None
+        for k in range(0,len(l1)):
+            if l0[0][0]==l1[k][0]:
+                mila=k
+                break
+        if mila!=None:
+            res_json['data']['candles']=l1[0:mila]+l0
+            open(filename,'w').write(json.dumps(res_json))
+        else:
+            res_json['data']['candles']=l1+l0
+            open(filename,'w').write(json.dumps(res_json))
+    else:
+        open(filename,'w').write(response.text)
+
+    
+   
+
+    
+
+    
+
+
+historical_data()
 #data_save()
 
 ##    print(dmc[0][0])
@@ -370,7 +435,8 @@ def data_save():
 ##    plt.plot([dmc[0][1]+ int(s)*5 for s in inv_t])
 ##    plt.plot([s[1] for s in dmc ])
 ##    plt.show()
-    
+
+#print(name(isin))
 #dadw()
 #rtd()
 #buy()
