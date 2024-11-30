@@ -1,15 +1,6 @@
-def cv():
-    return 60,
-def koko():
-    mlist=[]
-    while 1:
-     cv()
-
 xs2kn='eyJ0eXAiOiJKV1QiLCJrZXlfaWQiOiJza192MS4wIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiI4TEFKRzkiLCJqdGkiOiI2NzRhNzkxZDkwZTlhNjQ2YzdmMmI3NzAiLCJpc011bHRpQ2xpZW50IjpmYWxzZSwiaWF0IjoxNzMyOTMzOTE3LCJpc3MiOiJ1ZGFwaS1nYXRld2F5LXNlcnZpY2UiLCJleHAiOjE3MzMwMDQwMDB9.Q_dewkysJ9MkwvB2OnqLUIc40Rr5RM1mtXMQ6VWLMoM'
 
 isin='NSE_EQ|INE982J01020'
-
-
 
 lastorder=None
 lastorder_intent=0
@@ -35,8 +26,6 @@ def name(isin):
     except Exception as e:
         print("Exception when calling MarketQuoteApi->get_full_market_quote: %s\n" % e)
     
-
-
 def buysell(intent,isin,NOS):
     global lastorder,investment_status
     import upstox_client
@@ -112,7 +101,6 @@ def dadw():
     response = requests.get(url, headers=headers)
     open('Swiggy.txt','w').write(response.text)
 
-
 def t():
     import json
     from pprint import pprint
@@ -130,11 +118,7 @@ def t():
             tc=[]
         tc+=[ms[n]]
     return dc
-#   pprint(len(dc[-1]))
-#    for ntc in dc:       Har roj kitne me start hota
-#       print(ntc[0])
-
-                    
+                  
 def odin():    
     from pprint import pprint
     mc=t()
@@ -169,15 +153,6 @@ def ntk():
     ntks+=1
     return [t()[-1][0:ntks]]
 
-
-
-
-
-
-
-
-
-
 def tk():
     import requests
     import json
@@ -199,6 +174,7 @@ def tk():
             tc=[]
         tc+=[ms[n]]
     return dc
+
 def fenrir():
     import datetime
     print(isin)
@@ -349,9 +325,6 @@ def rtd():
             buysell(inv,isin,2)                            ##################################################################################################
         if 1:time.sleep(slp_tm)
         
-
-
-
 def data_save():
     import datetime
     from pprint import pprint
@@ -381,7 +354,6 @@ def data_save():
         s+=l[0]+' '+str(l[1])+'\n'
     s=s[0:-1]
     open(isin+'data.txt').write(s)
-
 
 def historical_data():
     import requests
@@ -416,26 +388,8 @@ def historical_data():
     else:
         open(filename,'w').write(response.text)
 
-    
-   
-
-    
-
-    
-
-
 historical_data()
 #data_save()
-
-##    print(dmc[0][0])
-##    
-##    print(per1,per2,per3,per4,acc_bal1,acc_bal2)
-##    
-##    import matplotlib.pyplot as plt
-##    plt.plot([dmc[0][1]+ int(s)*5 for s in inv_t])
-##    plt.plot([s[1] for s in dmc ])
-##    plt.show()
-
 #print(name(isin))
 #dadw()
 #rtd()
