@@ -33,7 +33,7 @@ if 0:
     #'https://api.upstox.com/v2/login/authorization/dialog?response_type=code&client_id=ddb1a379-62db-4ed3-b109-fb31df0596cc&redirect_uri=https%3A%2F%2F127.0.0.1%3A8000'
 
 
-code='HDj8h6'                        ################################################################
+code='NFQ3EU'                        ################################################################
 
 if 1:
     url = 'https://api.upstox.com/v2/login/authorization/token'

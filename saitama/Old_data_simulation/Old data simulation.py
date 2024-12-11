@@ -42,13 +42,13 @@ def t():      ### returns date wise list of all previous intraday data downloade
 
 
 
+
+
 def histocast():              ### input date me kitna profit or loss de rha different percentage execution basis pe
     import datetime
     print(isin)
     from pprint import pprint
     mc=t()
-    acc_bal1=100
-    acc_bal2=100
     r=1          #Margin
 
     date='2024-12-06'                           ##########################################
@@ -58,33 +58,12 @@ def histocast():              ### input date me kitna profit or loss de rha diff
         if mc[s][0][0].find(date)>-1:
             date_i=s
     dmc=mc[date_i] #day choose
-    inv=0
-    inv_t=[]
-    r=1
-    strategist=Saraswati.shadow_stalker(dmc[0][1])
-#    a=0.004
-    strategist.lb_per=0.002
-    strategist.ls_per=0.002
-    strategist.ss_per=0.002
-    strategist.sb_per=0.002
-
-    for n in range(1,len(dmc)):
-        inv_t+=[inv]
-        if inv==1:
-            acc_bal1=acc_bal1*dmc[n][1]/dmc[n-1][1]
-        if inv==-1:
-            ssn=ss*dmc[n][1]/dmc[n-1][1]
-            acc_bal2=acc_bal2+ss-ssn
-            ss=ssn
-        old_inv=inv
-        inv=strategist.advise(inv,dmc[n][1])     # advise mang rha he ki abhika investment status ye he and new price ye he to kya krna chahiye
-        if old_inv!=-1 and inv==-1:              # advise mangne ke badd ka investment
-            ss=acc_bal2*r
-    print(dmc[0][0])
-    print(acc_bal1,acc_bal2)
     
     import matplotlib.pyplot as plt
  
+    p=Saraswati.simu([l[1] for l in dmc],0.2,0.2,0.2,0.2)
+    print(p[0],p[1])
+    inv_t=p[2]
     values = [s[1] for s in dmc]
     # Calculate percentage change relative to the first value
     start_value = values[0]
@@ -95,6 +74,7 @@ def histocast():              ### input date me kitna profit or loss de rha diff
 
     print(len(dmc),len(inv_t))
     plt.show()
+
 
 if 0:dadw()
 if 1:histocast()

@@ -1,6 +1,6 @@
-xs2kn='eyJ0eXAiOiJKV1QiLCJrZXlfaWQiOiJza192MS4wIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiI4TEFKRzkiLCJqdGkiOiI2NzU3YTJkOTI3MmIxNTJjYzJlOTJkNzYiLCJpc011bHRpQ2xpZW50IjpmYWxzZSwiaWF0IjoxNzMzNzk2NTY5LCJpc3MiOiJ1ZGFwaS1nYXRld2F5LXNlcnZpY2UiLCJleHAiOjE3MzM4NjgwMDB9.pA9VBTDGaiUQHv6uNmuAegR1-kwf1AiBMFGq63GHQ1c'
+xs2kn='eyJ0eXAiOiJKV1QiLCJrZXlfaWQiOiJza192MS4wIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiI4TEFKRzkiLCJqdGkiOiI2NzU4ZmY0NTliOTYzNzAwMDFmNDUzYjIiLCJpc011bHRpQ2xpZW50IjpmYWxzZSwiaWF0IjoxNzMzODg1NzY1LCJpc3MiOiJ1ZGFwaS1nYXRld2F5LXNlcnZpY2UiLCJleHAiOjE3MzM5NTQ0MDB9.sHA-ZY-o_gT174iyMlvHJPw49JfGZneE9zvXJnjdiPA'
 
-isin='NSE_EQ|INE040A01034'
+isin='NSE_EQ|INE0ONG01011'
 
 NOS=1
 
@@ -12,11 +12,55 @@ lastorder=None
 lastorder_intent=0
 investment_status=0
 
+
+def simu(data,p1,p2,p3,p4):
+    strategist=shadow_stalker(data[0])
+    strategist.lb_per=p1
+    strategist.ls_per=p2
+    strategist.ss_per=p3
+    strategist.sb_per=p4
+    inv=0
+    inv_t=[]
+    r=1
+    acc_bal1=100
+    acc_bal2=100
+    for n in range(1,len(data)):
+        inv_t+=[inv]
+        if inv==1:
+            acc_bal1=acc_bal1*data[n]/data[n-1]
+        if inv==-1:
+            ssn=ss*data[n]/data[n-1]
+            acc_bal2=acc_bal2+ss-ssn
+            ss=ssn
+        old_inv=inv
+        inv=strategist.advise(inv,data[n])     # advise mang rha he ki abhika investment status ye he and new price ye he to kya krna chahiye
+        if old_inv!=-1 and inv==-1:              # advise mangne ke badd ka investment
+            ss=acc_bal2*r
+    return acc_bal1,acc_bal2,inv_t
+    
+    
+
+def percitest(data):
+    percentages=[0.01,0.02,0.03,0.04,0.05]
+    n=len(percentages)
+    max=0,argmax=[float('inf')]*4
+    for p1 in range(0,n):
+        for p2 in range(0,n):
+            for p3 in range(0,n):
+                for p4 in range(0,n):
+                    prapti=simu(data,p1,p2,p3,p4)
+                    if prapti[0]+prapti[1]>max:
+                        max=prapti[0]+prapti[1]
+                        argmax=[p1,p2,p3,p4]
+    return argmax
+
+
+
 class shadow_stalker:
-    lb_per=0.001        #long buy 
-    ls_per=0.001        #long sell
-    ss_per=0.001        #short sell
-    sb_per=0.001        #short buy
+    lb_per= 0.1        #long buy 
+    ls_per= 0.1        #long sell
+    ss_per= 0.1        #short sell
+    sb_per= 0.1        #short buy
     extrm_low=0       #dmc[0][1]
     extrm_high=0
     def __init__(self,initial_price):
@@ -24,19 +68,19 @@ class shadow_stalker:
         self.extrm_low=initial_price
     def advise(self,inv,new_price):  
         
-        if new_price< self.extrm_high*(1-self.ls_per) and inv== 1:
+        if new_price< self.extrm_high*(1-self.ls_per/100) and inv== 1:
             inv=0
             self.extrm_low=new_price
 
-        if new_price> self.extrm_low*(1+self.sb_per) and inv== -1:
+        if new_price> self.extrm_low*(1+self.sb_per/100) and inv== -1:
             inv=0
             self.extrm_high=new_price
             
-        if new_price-self.extrm_low> self.extrm_low*self.lb_per and inv==0:
+        if new_price-self.extrm_low> self.extrm_low*self.lb_per/100 and inv==0:
             inv=1
             self.extrm_high=new_price
             
-        if new_price-self.extrm_high<- self.extrm_high*self.ss_per and inv==0:
+        if new_price-self.extrm_high<- self.extrm_high*self.ss_per/100 and inv==0:
             inv=-1
             self.extrm_low=new_price
 
@@ -109,13 +153,13 @@ def time_difference():                ############################## time differ
     n=n.replace(hour=9,minute=14,second=0,microsecond=0)
     return n.timestamp()-p
 
-def buy():
+def buy(order_type='I'):
     import upstox_client
     from upstox_client.rest import ApiException
     configuration = upstox_client.Configuration()
     configuration.access_token = xs2kn
     api_instance = upstox_client.OrderApi(upstox_client.ApiClient(configuration))
-    body = upstox_client.PlaceOrderRequest(NOS, "I", "IOC", 0.0, "string", isin, "MARKET", "BUY", 0, 0.0, False)
+    body = upstox_client.PlaceOrderRequest(NOS, order_type, "IOC", 0.0, "string", isin, "MARKET", "BUY", 0, 0.0, False)
     api_version = '2.0'
     try:
         api_response = api_instance.place_order(body, api_version)
@@ -127,13 +171,13 @@ def buy():
     except Exception as e:
         print("Exception %s\n" % e.body)
 
-def sell():
+def sell(order_type='I'):
     import upstox_client
     from upstox_client.rest import ApiException
     configuration = upstox_client.Configuration()
     configuration.access_token = xs2kn
     api_instance = upstox_client.OrderApi(upstox_client.ApiClient(configuration))
-    body = upstox_client.PlaceOrderRequest(NOS, "I", "IOC", 0.0, "string", isin, "MARKET", "SELL", 0, 0.0, False)
+    body = upstox_client.PlaceOrderRequest(NOS, order_type, "IOC", 0.0, "string", isin, "MARKET", "SELL", 0, 0.0, False)
     api_version = '2.0'
     try:
         api_response = api_instance.place_order(body, api_version)
@@ -205,16 +249,12 @@ def alpha_hunt():           ## The main buy sell file
 
     r=1                      # Margin
  
-    per1=0.0015        #long buy 
-    per2=0.0015        #long sell
-    per3=0.0015        #short sell
-    per4=0.0015        #short buy
-    extrm_low=0       #dmc[0][1]
-    extrm_high=0
     dmc=[]
     inv=0            # Investment Intention
     inv_t=[]         # Historical Investment Intention List
     
+    strategist=None
+
 
     import time
     while True:
@@ -228,36 +268,14 @@ def alpha_hunt():           ## The main buy sell file
         dmc+=[[api_response.data[next(iter(api_response.data))].timestamp,api_response.data[next(iter(api_response.data))].last_price]]
         print(dmc[-1],datetime.datetime.now())
         if len(dmc)==1:
-            extrm_high=dmc[0][1]
-            extrm_low=dmc[0][1]
+            strategist=shadow_stalker(inv,dmc[0][1])
             time.sleep(slp_tm)
             continue
     
         n=len(dmc)-1
         inv_t+=[inv]
 
-        if dmc[n][1]< extrm_high*(1-per2) and inv== 1:
-            inv=0
-            extrm_low=dmc[n][1]
-
-        if dmc[n][1]> extrm_low*(1+per4) and inv== -1:
-            inv=0
-            extrm_high=dmc[n][1]
-            
-        if dmc[n][1]-extrm_low> extrm_low*per1 and inv==0:
-            inv=1
-            extrm_high=dmc[n][1]
-            
-        if dmc[n][1]-extrm_high<- extrm_high*per3 and inv==0:
-            inv=-1
-            extrm_low=dmc[n][1]
-
-        if dmc[n][1]-extrm_high>0:
-            extrm_high=dmc[n][1]
-        if dmc[n][1]-extrm_low<0:
-            extrm_low=dmc[n][1]
-
-
+        inv=strategist.advise(inv,dmc[n][1])
 
         print('buysell',inv)
         pass
@@ -279,7 +297,8 @@ if __name__ == '__main__':
     #data_save()
     #print(name(isin))
     #dadw()
-    alpha_hunt()
-    #buy()
-    #sell()
+    #alpha_hunt()
+    #buy('D')
+    #sell('D')
+    #print(orderstatus(241210025065761))
     pass
