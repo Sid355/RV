@@ -7,6 +7,7 @@ isin='NSE_EQ|INE118H01025'
 
 data_file_name=os.path.dirname(os.path.abspath(__file__))+'/'+Saraswati.name(isin)+'.txt'
 
+date='2024-10-09'                           ##########################################
 
 
 def dadw():   ### downloads historical intraday data and save it in a file
@@ -40,23 +41,29 @@ def t():      ### returns reversed date wise list of all previous intraday data 
 
 
 
-
-
-def maxfinder():              ### input date me kitna profit or loss de rha different percentage execution basis pe
+def date_list():
     import datetime
-    print(isin)
+   
     from pprint import pprint
     mc=t()
     r=1          #Margin
-
-    date='2024-10-09'                           ##########################################
-
     date_i=0                        
     for s in range(0,len(mc)):
         if mc[s][0][0].find(date)>-1:
             date_i=s
     dmc=mc[date_i]      #  dmc -  make a list of the choosen day
     # print(dmc[0])     #  ['2024-12-06T09:15:00+05:30', 5281.45, 5366.95, 5262, 5365.9, 272932, 0]
+    return dmc
+
+def date_range_list():
+    import datetime
+   
+    from pprint import pprint
+    mc=t()
+
+def maxfinder():              ### input date me kitna profit or loss de rha different percentage execution basis pe
+    print(isin)
+    dmc=date_list()
     print(dmc[0])
     print(Saraswati.percitest([l[1] for l in dmc]))
 

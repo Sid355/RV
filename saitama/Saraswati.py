@@ -64,8 +64,10 @@ def percitest(data):
                     prapti=simu(data,p1,p2,p3,p4)       # simulation
                     if prapti[0]+prapti[1]>max:
                         max=prapti[0]+prapti[1]
-                        argmax=[p1,p2,p3,p4,prapti[0],prapti[1]]
-    return max,argmax
+                        argmax=[p1,p2,p3,p4]
+                        p0=prapti[0]
+                        p1=prapti[1]
+    return max,p0,p1,argmax
 
 
 
