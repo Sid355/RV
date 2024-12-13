@@ -8,6 +8,7 @@ isin='NSE_EQ|INE118H01025'
 data_file_name=os.path.dirname(os.path.abspath(__file__))+'/'+Saraswati.name(isin)+'.txt'
 
 
+
 def dadw():   ### downloads historical intraday data and save it in a file
     import requests
     url = 'https://api.upstox.com/v2/historical-candle/'+isin.replace('|','%7C')+'/1minute/2024-12-06/2024-03-07'
@@ -19,7 +20,7 @@ def dadw():   ### downloads historical intraday data and save it in a file
 
 
 
-def t():      ### returns date wise list of all previous intraday data downloaded from dadw() 
+def t():      ### returns reversed date wise list of all previous intraday data downloaded from dadw() 
     import json
     from pprint import pprint
     #{"status":"success","data":{"candles":[  ["2024-12-06T15:29:00+05:30",817.55,818,817,818,75421,0],["2024-12-06T15:28:00+05:30",817.95,818,817,817.85,100533,0],["2024-12-06T15:27:00+05:30",818.3,818.35,817.5,817.95,65663,0] }
@@ -30,18 +31,34 @@ def t():      ### returns date wise list of all previous intraday data downloade
     dc=[]   # date wise list         [  [all data of 2024-03-17]   [all data of 2024-03-18]  ]
     tc=[]   # temporary list
     for n in range(0,len(ms)):
-        if n!=0 and ms[n-1][0].split('T')[0]!=ms[n][0].split('T')[0]:
+        if n != 0 and ms[n-1][0].split('T')[0] != ms[n][0].split('T')[0]:
             dc+=[tc]
             tc=[]
         tc+=[ms[n]]
     dc+=[tc]                    # final date ko dc me add kr diye
     return dc                   # Har date ka alag kr rha
-#   pprint(len(dc[-1]))
-#    for ntc in dc:       Har roj kitne me start hota
-#       print(ntc[0])
 
 
 
+
+
+def maxfinder():              ### input date me kitna profit or loss de rha different percentage execution basis pe
+    import datetime
+    print(isin)
+    from pprint import pprint
+    mc=t()
+    r=1          #Margin
+
+    date='2024-10-09'                           ##########################################
+
+    date_i=0                        
+    for s in range(0,len(mc)):
+        if mc[s][0][0].find(date)>-1:
+            date_i=s
+    dmc=mc[date_i]      #  dmc -  make a list of the choosen day
+    # print(dmc[0])     #  ['2024-12-06T09:15:00+05:30', 5281.45, 5366.95, 5262, 5365.9, 272932, 0]
+    print(dmc[0])
+    print(Saraswati.percitest([l[1] for l in dmc]))
 
 
 def histocast():              ### input date me kitna profit or loss de rha different percentage execution basis pe
@@ -51,14 +68,14 @@ def histocast():              ### input date me kitna profit or loss de rha diff
     mc=t()
     r=1          #Margin
 
-    date='2024-12-06'                           ##########################################
+    date='2024-10-11'                           ##########################################
 
     date_i=0
     for s in range(0,len(mc)):
         if mc[s][0][0].find(date)>-1:
             date_i=s
     dmc=mc[date_i] #day choose
-    
+    print(dmc[0])         #        ['2024-12-06T09:15:00+05:30', 5281.45, 5366.95, 5262, 5365.9, 272932, 0]
     import matplotlib.pyplot as plt
  
     p=Saraswati.simu([l[1] for l in dmc],0.2,0.2,0.2,0.2)
@@ -77,4 +94,5 @@ def histocast():              ### input date me kitna profit or loss de rha diff
 
 
 if 0:dadw()
-if 1:histocast()
+if 0:histocast()
+if 1:maxfinder()
