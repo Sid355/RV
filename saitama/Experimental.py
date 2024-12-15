@@ -1,55 +1,34 @@
-xs2kn='eyJ0eXAiOiJKV1QiLCJrZXlfaWQiOiJza192MS4wIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiI4TEFKRzkiLCJqdGkiOiI2NzU2NTc2NjQ5OTlkYTI5YTMwNDcyZGQiLCJpc011bHRpQ2xpZW50IjpmYWxzZSwiaWF0IjoxNzMzNzExNzE4LCJpc3MiOiJ1ZGFwaS1nYXRld2F5LXNlcnZpY2UiLCJleHAiOjE3MzM3ODE2MDB9.m2QP1eoft5HzhlCcn-4POb51lQdMtk8QPSUFc-XGPo4'
+if 0:
+    date1='2024-06-09T09:15:00+05:30'
+    date2='2024-06-17T09:15:00+05:30'
 
-isin='NSE_EQ|INE248A01017'
+    if date1>date2: 
+        print(1)
+    if date2>date1: 
+        print(2)
+    if date2==date1: 
+        print(0)
 
-NOS=1
+if 1:
+    mc=[1,4,6,8,9,24,36,79]
+    date=12
+    for s in range(0,len(mc)):
+        if date < mc[0]:
+            date_i=0
+            break
+        if date < mc[s]:
+            date_i=s-1
+            break
+    print(date_i)
 
+if 0:
+    mc=[1,4,6,8,9,24,36,79]
+    for s in range(0,len(mc)):
+        if mc[s]>80:
+            print('Good Boy')
+            print(s-1)
+            break
 
-slp_tm=30      #sleep time                                                          ###############################################################################
-    
-
-def buy():
-    import upstox_client
-    from upstox_client.rest import ApiException
-    configuration = upstox_client.Configuration()
-    configuration.access_token = xs2kn
-    api_instance = upstox_client.OrderApi(upstox_client.ApiClient(configuration))
-    body = upstox_client.PlaceOrderRequest(NOS, "I", "IOC", 0.0, "string", isin, "MARKET", "BUY", 0, 0.0, False)
-    api_version = '2.0'
-    try:
-        api_response = api_instance.place_order(body, api_version)
-        print(api_response)
-        if api_response.status=='success':
-            os=orderstatus(api_response.data.order_id)
-            return (os,os.data.status)
-            
-    except Exception as e:
-        print("Exception %s\n" % e.body)
-
-def sell():
-    import upstox_client
-    from upstox_client.rest import ApiException
-    configuration = upstox_client.Configuration()
-    configuration.access_token = xs2kn
-    api_instance = upstox_client.OrderApi(upstox_client.ApiClient(configuration))
-    body = upstox_client.PlaceOrderRequest(NOS, "I", "IOC", 0.0, "string", isin, "MARKET", "SELL", 0, 0.0, False)
-    api_version = '2.0'
-    try:
-        api_response = api_instance.place_order(body, api_version)
-        print(api_response)
-        if api_response.status=='success':
-            os=orderstatus(api_response.data.order_id)
-            return (os,os.data.status)
-            
-    except Exception as e:
-        print("Exception %s\n" % e.body)
-
-if __name__ == '__main__':
-    #historical_data()
-    #data_save()
-    #print(name(isin))
-    #dadw()
-    #alpha_hunt()
-    #buy()
-    #sell()
-    pass
+if 0:
+    mc=[1,4,6,8,9,24,36,79]
+    print(mc[-1])

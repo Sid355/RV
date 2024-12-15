@@ -1,4 +1,4 @@
-xs2kn='eyJ0eXAiOiJKV1QiLCJrZXlfaWQiOiJza192MS4wIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiI4TEFKRzkiLCJqdGkiOiI2NzViODc5Zjc0Mzk4ZDE2MTdmYWJhMjEiLCJpc011bHRpQ2xpZW50IjpmYWxzZSwiaWF0IjoxNzM0MDUxNzQzLCJpc3MiOiJ1ZGFwaS1nYXRld2F5LXNlcnZpY2UiLCJleHAiOjE3MzQxMjcyMDB9.6LChQq8V6XT0n8m98rshFevG0YCnykp413-BJ4YRHOs'
+xs2kn='eyJ0eXAiOiJKV1QiLCJrZXlfaWQiOiJza192MS4wIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiI4TEFKRzkiLCJqdGkiOiI2NzVlMjVjZTc0Mzk4ZDE2MTdmYWU4MDYiLCJpc011bHRpQ2xpZW50IjpmYWxzZSwiaWF0IjoxNzM0MjIzMzEwLCJpc3MiOiJ1ZGFwaS1nYXRld2F5LXNlcnZpY2UiLCJleHAiOjE3MzQzMDAwMDB9.lgsb-iuQK1luwmtdXVqMtvMYRaFUtqu8Wd9CQNX_FYY'
 
 isin='NSE_EQ|INE0ONG01011'
 
@@ -23,51 +23,59 @@ def simu(data,p1,p2,p3,p4):
     inv=0
     inv_t=[]
     r=1
-    acc_bal1=100
-    acc_bal2=100
+    long_bal=100
+    short_bal=100
     long_charges=0
     short_charges=0
     intraday_charges=(1/100)*0.04   ### 0.03512 exact combining buy and sell side
-    margin_charge=0
-    for n in range(1,5):  #len(data)):
+    #margin_charge=0
+    for n in range(1,len(data)):
         inv_t+=[inv]
         if inv==1:
-            acc_bal1=acc_bal1*data[n]/data[n-1]
+            long_bal=long_bal*data[n]/data[n-1]
         if inv==-1:
             ssn=ss*data[n]/data[n-1]
-            acc_bal2=acc_bal2+ss-ssn
+            short_bal=short_bal+ss-ssn
             ss=ssn
         old_inv=inv
+
         inv=advisor.advise(inv,data[n])     # advise mang rha he ki abhika investment status ye he and new price ye he to kya krna chahiye
+        
+
         if old_inv!=-1 and inv==-1:              # advise mangne ke badd ka investment
-            ss=acc_bal2*r
+            ss=short_bal*r
         if old_inv!=inv:
             if inv==1:
-                long_charges+=intraday_charges*acc_bal1
-                print(long_charges)
-                #acc_bal1=acc_bal1-long_charges     ### problem - pehle charge katke uska kitna profit loss hua wo dekhte hne
+                long_charges+=intraday_charges*long_bal
+                #print(long_charges)     ### problem - pehle charge katke uska kitna profit loss hua wo dekhte hne
             if inv==-1:
-                short_charges+=intraday_charges*acc_bal2
-                #acc_bal2=acc_bal2-short_charges    ### problem
-    return acc_bal1,acc_bal2,inv_t
+                short_charges+=intraday_charges*short_bal
+                    ### problem
+    
+    long_bal=long_bal-long_charges
+    short_bal=short_bal-short_charges
+    
+    return long_bal,short_bal,inv_t
     
     
 
 def percitest(data):
-    percentages=[0.01,0.02,0.03,0.04,0.05]
+    percentages=[0.1,0.2,0.3,0.4,0.5]
     max=0
     argmax=[float('inf')]*4
     for p1 in percentages:
         for p2 in percentages:
             for p3 in percentages:
                 for p4 in percentages:
+
                     prapti=simu(data,p1,p2,p3,p4)       # simulation
+                    
                     if prapti[0]+prapti[1]>max:
-                        max=prapti[0]+prapti[1]
-                        argmax=[p1,p2,p3,p4]
-                        p0=prapti[0]
-                        p1=prapti[1]
-    return max,p0,p1,argmax
+                       max=prapti[0]+prapti[1]
+                       argmax=[p1,p2,p3,p4]
+                       long_pnl=prapti[0]
+                       short_pnl=prapti[1]
+    return max,long_pnl,short_pnl,argmax
 
 
 
