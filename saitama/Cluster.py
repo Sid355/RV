@@ -1,36 +1,41 @@
 import Saraswati
+from Historical_data_simulation import Historical_data_simulation
 
 
-def dt_ws_lst(isin):             ### it will make a date wise list of any given list
-    import json
-    from pprint import pprint
-    ms=open(Saraswati.name(isin)+'.txt','r').read()
-    ms=json.loads(ms)['data']['candles']
-    ms=list(reversed(ms))
-   # pprint(ms[-1][0].split('T')[0])
-    dc=[]
-    tc=[]
-    for n in range(0,len(ms)):
-        if n==0:
-            tc+=[ms[n]]
-        elif ms[n-1][0].split('T')[0]!=ms[n][0].split('T')[0]:
-            dc+=[tc]
-            tc=[]
-        tc+=[ms[n]]
-    return dc
+def edl():    #equally divided list
+    dwl=Historical_data_simulation.date_wise_list()
+    obs_time=10    #time interval to observe    #Note- obs_time > exe_time
+    exe_time=5     #time interval to execute 
+    obs_list=[]
+    exe_list=[]
+    for n in range(0,len(dwl)):
+        for m in range(0,len(dwl[n])-obs_time-exe_time+1): #one cl_minutes is for no of interval and +1 is for list format as last exculding
+            tl=dwl[n][m:m+obs_time+1]
+            obs_list+=[tl]    
+            sl=dwl[n][m+exe_time:m+2*exe_time+1]
+            exe_list+=[sl]      
+    return obs_list,exe_list
 
-def obsv_wndw(isin):             ## The time period we will observe
-    dwl=dt_ws_lst(isin)
-    last_exclude=5
-    window_size=5   ## no of point
-    neo_list=[]
-    for k in range(0,len(dwl)):
-        for s in range(0,len(dwl[k])-last_exclude) :
-            tl=[l[4] for l in dwl[k][s:s+window_size]]  #s+ ka last wala include nehni hota     
-            neo_list+= [[(tl[q+1]-tl[q])/tl[q]*100 for q in range(0,window_size-1)]]   
-    return neo_list
+class seeder:    # seeds for cluster
+    def per():
+        per_change=[0.05,0.1,0.15,0.2,0.25,0.3,0.35,0.4]
+        per_seeds=Saraswati.combination_pers()
+        print(per_seeds)
+        return per_seeds
+    def kms(): pass
 
-def cluster(isin):                        ###it make cluster with KMean++(automatic seed points)
+class norm:
+    def l2_norm(first,second):
+        first
+
+def cluster():
+    obs_list,exe_list=edl()
+    seeds=seeder.per()
+    
+
+
+
+def kms_cluster(isin):                        ###it make cluster with KMean++(automatic seed points)
     from sklearn.cluster import KMeans
     import numpy as np
     ns=obsv_wndw(isin)
@@ -56,5 +61,13 @@ def cluster(isin):                        ###it make cluster with KMean++(automa
     if 1:plt.show()
 
 
-print(obsv_wndw(Saraswati.isin))
-#print(dt_ws_lst(Saraswati.isin)[1])%%
+
+
+PTR=    0     # programm to run    0=nothing
+
+if PTR==0: pass 
+if PTR==1: edl()
+if PTR==2: cluster()
+if PTR==3: pass
+if PTR==4: pass
+
