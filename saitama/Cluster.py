@@ -1,7 +1,6 @@
 import Saraswati
 from Historical_data_simulation import Historical_data_simulation
 
-
 def edl():    #equally divided list
     dwl=Historical_data_simulation.date_wise_list()
     obs_time=10    #time interval to observe    #Note- obs_time > exe_time
@@ -59,6 +58,8 @@ def kms_cluster(isin):                        ###it make cluster with KMean++(au
             if vks[n]==k:
                 plt.plot(np.concatenate((ns[n],np.array(nstd[n])[0:1])))
     if 1:plt.show()
+
+
 
 
 

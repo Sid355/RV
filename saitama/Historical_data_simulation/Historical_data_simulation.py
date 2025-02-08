@@ -3,18 +3,51 @@ import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import Saraswati
 
-symbol,isin = 'PAYTM'        ,'NSE_EQ|INE982J01020'
 
-# 'ITI'          ,'NSE_EQ|INE248A01017'
-# 'MOBIKWIK'     ,'NSE_EQ|INE0HLU01028'
-# 'TATAMOTORS'   ,'NSE_EQ|INE155A01022'
-# 'SWIGGY'       ,'NSE_EQ|INE00H001014'
-# 'OLAELEC'      ,'NSE_EQ|INE0LXG01040'
-# 'ADANIGREEN'   ,'NSE_EQ|INE364U01010'
-# 'ADANIPOWER'   ,'NSE_EQ|INE814H01011'
-# 'PAYTM'        ,'NSE_EQ|INE982J01020'
-  
-date='2024-12-02'                           ##########################################
+isin_map = {
+    1: ("ITI",         "NSE_EQ|INE248A01017"),
+    2: ("MOBIKWIK",    "NSE_EQ|INE0HLU01028"),
+    3: ("TATAMOTORS",  "NSE_EQ|INE155A01022"),
+    4: ("SWIGGY",      "NSE_EQ|INE00H001014"),
+    5: ("OLAELEC",     "NSE_EQ|INE0LXG01040"),
+    6: ("ADANIGREEN",  "NSE_EQ|INE364U01010"),
+    7: ("ADANIPOWER",  "NSE_EQ|INE814H01011"),
+    8: ("PAYTM",       "NSE_EQ|INE982J01020"),
+    9: ("HAL",         "NSE_EQ|INE066F01020"),
+    10:("HINDALCO",    "NSE_EQ|INE038A01020"),
+    11:("ITC",         "NSE_EQ|INE154A01025"),
+    12:("KALYANKJIL",  "NSE_EQ|INE303R01014"),
+    13:("TATAPOWER",   "NSE_EQ|INE245A01021"),
+    14:("TATASTEEL",   "NSE_EQ|INE081A01020"),
+    15:("SWIGGY",      "NSE_EQ|INE00H001014"),
+    16:("SUZLON",      "NSE_EQ|INE040H01021"),
+    17:("RELIANCE",    "NSE_EQ|INE002A01018"),
+    18:("RELIGARE",    "NSE_EQ|INE621H01010"),
+    19:("RAYMOND",     "NSE_EQ|INE301A01014"),
+#    20:("PREMIERENE",  "NSE_EQ|INE0BS701011"),
+#    21:("ONGC",        "NSE_EQ|INE213A01029"),
+#    16:("",  "NSE_EQ| "),
+#    16:("",  "NSE_EQ| "),
+#    16:("",  "NSE_EQ| "),
+#    16:("",  "NSE_EQ| "),
+#    16:("",  "NSE_EQ| "),
+#    16:("",  "NSE_EQ| "),
+#    16:("",  "NSE_EQ| "),
+}
+
+
+
+def get_only_one_isin(isin_quest):      #isin_quest = 8   
+    return isin_map.get(isin_quest, (None, None))
+
+symbol, isin = get_only_one_isin(9)             ##################################################################
+print(f"ISIN Quest  => symbol: {symbol}, isin: {isin}")
+
+
+
+
+
+date='2025-01-20'                           ##########################################
 
 def program_selection():
         
@@ -65,7 +98,7 @@ def symbol_find():            ### For a given ISIN ('NSE_EQ|INE0HLU01028') of th
     if symbol is None:
         print(f"Symbol for this ISIN is not present in both the .csv file.")  
 
-
+# i SHOULD take retrieve to another program named retrieve in deep storage . in deepstorage the data files will be there. also with retrieve for a particular day or for a range of days will be there as functions.
 def retrieve(symbol=symbol,isin=isin):         ### Retrieve data. if not available creates in additional folder. Modify it to combine the data. also modiy the deep_storage to download and modify a single data file     
     import json
     file_name= f'{symbol}_{isin.split('|')[1]}.txt'
@@ -100,7 +133,6 @@ def retrieve(symbol=symbol,isin=isin):         ### Retrieve data. if not availab
             
             data = response.json()  # Returns a Python dict or list
             # Save to the last file path (E:/RV/saitama/Deep_storage/Additional_storage)
-            print(5)
             with open(file_paths[2], 'w', encoding='utf-8') as file:
                 json.dump(data, file)
             return data
@@ -166,7 +198,7 @@ def maxfinder(date=date):              ### input date me kitna profit or loss de
     print(isin)
     dmc=date_list(date)
     print(dmc[0])
-    print(Saraswati.percitest([l[1] for l in dmc],weight=0))
+    print(Saraswati.percitest([l[1] for l in dmc]))
 
 
 
